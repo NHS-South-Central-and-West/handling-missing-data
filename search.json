@@ -151,6 +151,6 @@
     "href": "index.html#references",
     "title": "Handling Missing Data",
     "section": "References",
-    "text": "References\n\n\n\nPaul Johnson // Handling Missing Values // Jan 31, 2024\n\n\n\n\nMurray, Jared S. 2018. “Multiple Imputation: A Review of Practical and Theoretical Findings.” https://arxiv.org/pdf/1801.04058.pdf.\n\n\nNguyen, Mike. 2020. A Guide on Data Analysis. Bookdown. https://bookdown.org/mike/data_analysis/.\n\n\nRubin, Donald B. 1987. Multiple Imputation for Nonresponse in Surveys. Wiley.\n\n\nVan Buuren, Stef. 2018. Flexible Imputation of Missing Data. CRC press. https://stefvanbuuren.name/fimd/."
+    "text": "References\n\n\n\nPaul Johnson // Handling Missing Values // Feb 07, 2024\n\n\n\n\nMurray, Jared S. 2018. “Multiple Imputation: A Review of Practical and Theoretical Findings.” https://arxiv.org/pdf/1801.04058.pdf.\n\n\nNguyen, Mike. 2020. A Guide on Data Analysis. Bookdown. https://bookdown.org/mike/data_analysis/.\n\n\nRubin, Donald B. 1987. Multiple Imputation for Nonresponse in Surveys. Wiley.\n\n\nVan Buuren, Stef. 2018. Flexible Imputation of Missing Data. CRC press. https://stefvanbuuren.name/fimd/."
   }
 ]
