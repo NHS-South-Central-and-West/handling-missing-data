@@ -1,0 +1,156 @@
+[
+  {
+    "objectID": "index.html#sources-of-missingness",
+    "href": "index.html#sources-of-missingness",
+    "title": "Handling Missing Data",
+    "section": "Sources of Missingness",
+    "text": "Sources of Missingness\nThere are three types of missing data (Rubin 1987):\n\nMissing Completely at Random (MCAR) - Randomly missing, no relationship with other variables in the data, values randomly distributed\nMissing at Random (MAR) - Values randomly distributed, but there is a relationship with other variables in the data\nMissing Not at Random (MNAR) - Missingness is related to other variables and missing values are not random"
+  },
+  {
+    "objectID": "index.html#distribution-without-missing-values",
+    "href": "index.html#distribution-without-missing-values",
+    "title": "Handling Missing Data",
+    "section": "Distribution Without Missing Values",
+    "text": "Distribution Without Missing Values\n\n\nplot_satisfaction &lt;-\n  function(data) {\n    data |&gt;\n      ggplot(aes(x = years_at_company, fill = job_satisfaction)) +\n      geom_histogram(colour = \"grey20\") +\n      scwplot::scale_fill_sequential(\n        palette = \"blues\",\n        discrete = TRUE\n      ) +\n      labs(\n        x = \"Years at Company\", y = NULL,\n        title = \"Employee Tenure by Job Satisfaction\"\n      )\n  }\n\nattrition |&gt;\n  plot_satisfaction()"
+  },
+  {
+    "objectID": "index.html#missing-completely-at-random-mcar",
+    "href": "index.html#missing-completely-at-random-mcar",
+    "title": "Handling Missing Data",
+    "section": "Missing Completely at Random (MCAR)",
+    "text": "Missing Completely at Random (MCAR)\n\n\nset.seed(123)\n\nattrition |&gt;\n  mutate(\n    years_at_company = replace(\n      years_at_company,\n      runif(n()) &lt; 0.5, NA\n    )\n  ) |&gt;\n  plot_satisfaction()"
+  },
+  {
+    "objectID": "index.html#missing-at-random-mar",
+    "href": "index.html#missing-at-random-mar",
+    "title": "Handling Missing Data",
+    "section": "Missing at Random (MAR)",
+    "text": "Missing at Random (MAR)\n\n\nset.seed(123)\n\nattrition |&gt;\n  mutate(\n    years_at_company =\n      replace(\n        years_at_company,\n        runif(n()) &lt; 0.8 & job_satisfaction == \"Low\", NA\n      )\n  ) |&gt;\n  plot_satisfaction()"
+  },
+  {
+    "objectID": "index.html#missing-not-at-random-mnar",
+    "href": "index.html#missing-not-at-random-mnar",
+    "title": "Handling Missing Data",
+    "section": "Missing Not at Random (MNAR)",
+    "text": "Missing Not at Random (MNAR)\n\n\nattrition |&gt;\n  mutate(\n    years_at_company =\n      replace(\n        years_at_company,\n        years_at_company &lt; 20, NA\n      )\n  ) |&gt;\n  plot_satisfaction()"
+  },
+  {
+    "objectID": "index.html#common-strategies-for-missingness",
+    "href": "index.html#common-strategies-for-missingness",
+    "title": "Handling Missing Data",
+    "section": "Common Strategies for Missingness",
+    "text": "Common Strategies for Missingness\n\nThe best solution for missing data is to find the data, whether by data collection or processing, or theory-driven inference.\nWhen this is not possible there are two broad approaches to dealing with missing values:\n\nDeletion - Listwise Deletion, Pairwise Deletion\nReplacement - Mean/Median/Mode Imputation, Multiple Imputation, Regression Imputation\n\n\nThe right approach is highly dependent on the nature of the missing data.\nDealing with missing data requires understanding why it is missing first!"
+  },
+  {
+    "objectID": "index.html#deletion-methods",
+    "href": "index.html#deletion-methods",
+    "title": "Handling Missing Data",
+    "section": "Deletion Methods",
+    "text": "Deletion Methods\n\n\nListwise Deletion\n\nRemoving any rows that contain missing values for any relevant variables.\nAnalysis carried out on complete cases only.\n\n\n\nPairwise deletion\n\nRemoving cases where all variables contain missing values.\nAnalysis can be carried out on any data that is complete.\n\n\nListwise deletion can be appropriate when data is missing completely at random, and the volume of missing values is not itself problematic.\nPairwise deletion is less common, but can also work when data is MCAR, and assumes that data is approximately normally distributed."
+  },
+  {
+    "objectID": "index.html#imputation-methods",
+    "href": "index.html#imputation-methods",
+    "title": "Handling Missing Data",
+    "section": "Imputation Methods",
+    "text": "Imputation Methods\n\nImputation involves replacing missing values with values inferred from the rest of the data.\nThere are two types of imputation:\n\nSingle Imputation - Replacing missing values with a single value, estimated from some statistical procedure.\nMultiple Imputation - Creating multiple datasets each replacing missing values with plausible estimated values and pooling estimates from analyses carried out on each dataset."
+  },
+  {
+    "objectID": "index.html#mean-imputation",
+    "href": "index.html#mean-imputation",
+    "title": "Handling Missing Data",
+    "section": "Mean Imputation",
+    "text": "Mean Imputation\n\nThe simplest statistical procedure for imputing missing values is replacing all missing values with the variable’s average value1.\nThis is almost always a bad idea, because it has multiple flaws:\n\nDistorts the variable’s distribution, underestimating it’s variance (Van Buuren 2018).\nDisrupts the relationship between the variable with imputed values and all other variables (Nguyen 2020).\nBiases model estimates (Van Buuren 2018).\n\n\nMean imputation is most common, but the median or mode value can also be used."
+  },
+  {
+    "objectID": "index.html#regression-without-imputation",
+    "href": "index.html#regression-without-imputation",
+    "title": "Handling Missing Data",
+    "section": "Regression Without Imputation",
+    "text": "Regression Without Imputation\n\n\nplot_regression &lt;-\n  function(data) {\n    data |&gt;\n      ggplot(aes(x = total_working_years, y = monthly_income)) +\n      geom_point(shape = 21, size = 1.5, alpha = .5) +\n      geom_smooth(\n        method = lm, colour = \"#005EB8\",\n        fill = \"#005EB8\", alpha = .5\n      ) +\n      labs(\n        x = \"Total Working Years\", y = \"Monthly Income\",\n        title = \"Monthly Income ~ Total Length of Career\"\n      )\n  }\n\nattrition |&gt;\n  plot_regression()"
+  },
+  {
+    "objectID": "index.html#mean-imputation-1",
+    "href": "index.html#mean-imputation-1",
+    "title": "Handling Missing Data",
+    "section": "Mean Imputation",
+    "text": "Mean Imputation\n\n\nset.seed(123)\n\nmissing_years &lt;-\n  attrition |&gt;\n  mutate(\n    total_working_years =\n      replace(\n        total_working_years,\n        runif(n()) &lt; 0.8 &\n          (job_level &lt;= 2 | age &gt; 35), NA\n      )\n  )\n\nmissing_years |&gt;\n  mice::mice(\n    method = \"mean\", m = 1,\n    maxit = 1, print = FALSE\n  ) |&gt;\n  mice::complete() |&gt;\n  plot_regression()"
+  },
+  {
+    "objectID": "index.html#regression-imputation",
+    "href": "index.html#regression-imputation",
+    "title": "Handling Missing Data",
+    "section": "Regression Imputation",
+    "text": "Regression Imputation\n\nA more robust approach to single imputation is to estimate missing values using a predictive model of the variable in question, using the rest of the variables in the dataset.\nRegression imputation can rely on a variety of models, based on the type of data being imputed and how complex the model should be."
+  },
+  {
+    "objectID": "index.html#regression-imputation-1",
+    "href": "index.html#regression-imputation-1",
+    "title": "Handling Missing Data",
+    "section": "Regression Imputation",
+    "text": "Regression Imputation\n\n\nmissing_years |&gt; \n  mice::mice(\n    method = \"norm.predict\", m = 1,\n    maxit = 1, print = FALSE\n  ) |&gt;\n  mice::complete() |&gt;\n  plot_regression()"
+  },
+  {
+    "objectID": "index.html#stochastic-regression-imputation",
+    "href": "index.html#stochastic-regression-imputation",
+    "title": "Handling Missing Data",
+    "section": "Stochastic Regression Imputation",
+    "text": "Stochastic Regression Imputation\n\n\nmissing_years |&gt; \n  mice::mice(\n    method = \"norm.nob\", m = 1, maxit = 1, \n    print = FALSE, seed = 123\n  ) |&gt;\n  mice::complete() |&gt;\n  plot_regression()"
+  },
+  {
+    "objectID": "index.html#the-problem-with-single-imputation",
+    "href": "index.html#the-problem-with-single-imputation",
+    "title": "Handling Missing Data",
+    "section": "The Problem with Single Imputation",
+    "text": "The Problem with Single Imputation\n\nImputing one value for a missing datum cannot be correct in general, because we don’t know what value to impute with certainty (if we did, it wouldn’t be missing) (Rubin 1987)."
+  },
+  {
+    "objectID": "index.html#multiple-imputation",
+    "href": "index.html#multiple-imputation",
+    "title": "Handling Missing Data",
+    "section": "Multiple Imputation",
+    "text": "Multiple Imputation\n\nMultiple imputation involves generating multiple datasets, performing analysis on each, and pooling the results. This is a two-stage process:\n\nGenerate multiple completed datasets, filling missing values using a statistical model that estimates imputation values, plus a random component to capture the uncertainty in the estimate.\nCompute estimates on each completed dataset before combining them as pooled estimates and standard errors, using Rubin (1987)’s formula (Murray 2018).\n\n\nThe methods used for each stage may differ, but this two-stage approach is generally consistent across all forms of multiple imputation.\nThis approach acknowledges the uncertainty in the imputation of missing values, and bakes that uncertainty into the process, instead of treating imputed values with equal weight/certainty as non-missing values."
+  },
+  {
+    "objectID": "index.html#multiple-imputation-1",
+    "href": "index.html#multiple-imputation-1",
+    "title": "Handling Missing Data",
+    "section": "Multiple Imputation",
+    "text": "Multiple Imputation\n\n\nmissing_years |&gt; \n  mice::mice(\n    method = \"pmm\", m = 30, maxit = 10, \n    print = FALSE, seed = 123\n  ) |&gt;\n  mice::complete() |&gt;\n  plot_regression()"
+  },
+  {
+    "objectID": "index.html#regression-setup",
+    "href": "index.html#regression-setup",
+    "title": "Handling Missing Data",
+    "section": "Regression Setup",
+    "text": "Regression Setup\n\nset.seed(123)\n\nmissing_income &lt;-\n  attrition |&gt;\n  mutate(monthly_income = replace(monthly_income, runif(n()) &lt; 0.8 & (job_level &lt;= 2 | total_working_years &gt; 10), NA),\n         total_working_years = replace(total_working_years, runif(n()) &lt; 0.5 & job_level &gt;= 3, NA))\n\nget_pooled_estimates &lt;-\n  function(data, method, m, maxit) {\n    data |&gt;\n      mice::mice(method = method, m = m, maxit = maxit, print = FALSE, seed = 123) |&gt;\n      with(glm(factor(attrition) ~ arm::rescale(monthly_income) + total_working_years, family = \"binomial\")) |&gt; \n      mice::pool()\n  }\n\nno_imp &lt;- glm(factor(attrition) ~ arm::rescale(monthly_income) + total_working_years, family = \"binomial\", data = attrition)\nmean_imp &lt;- missing_income |&gt; get_pooled_estimates(method = \"mean\", m = 1, maxit = 1)\nnorm_imp &lt;- missing_income |&gt; get_pooled_estimates(method = \"norm.predict\", m = 1, maxit = 1)\npmm_imp &lt;- missing_income |&gt; get_pooled_estimates(method = \"pmm\", m = 50, maxit = 20)"
+  },
+  {
+    "objectID": "index.html#regression-estimates",
+    "href": "index.html#regression-estimates",
+    "title": "Handling Missing Data",
+    "section": "Regression Estimates",
+    "text": "Regression Estimates\n\n\nmodels &lt;-\n  list(\"No Imputation\" = no_imp,\n       \"Mean\" = mean_imp,\n       \"Regression\" = norm_imp,\n       \"Predictive Mean Matching\" = pmm_imp)\n\ncm &lt;- c(\"(Intercept)\" = \"(Intercept)\",\n        \"arm::rescale(monthly_income)\" = \"Monthly Income\",\n        \"total_working_years\" = \"Total Working Years\")\n\nmodelsummary::modelsummary(\n  models, exponentiate = TRUE, output = \"gt\",\n  coef_map = cm, gof_omit = \"IC|Log|F|RMSE\",\n  title = \"Logstic Regressions of Job Attrition\"\n  ) |&gt;\n  gt::tab_spanner(label = \"Single Imputation\", columns = 3:4) |&gt; \n  gt::tab_spanner(label = \"Multiple Imputation\", columns = 5)\n\n\n\n\n\nLogstic Regressions of Job Attrition\n\n\n\nNo Imputation\nSingle Imputation\nMultiple Imputation\n\n\nMean\nRegression\nPredictive Mean Matching\n\n\n\n\n(Intercept)\n0.301\n0.423\n0.268\n0.303\n\n\n\n(0.058)\n(0.062)\n(0.056)\n(0.072)\n\n\nMonthly Income\n0.550\n0.865\n0.444\n0.564\n\n\n\n(0.154)\n(0.142)\n(0.134)\n(0.227)\n\n\nTotal Working Years\n0.950\n0.913\n0.959\n0.949\n\n\n\n(0.016)\n(0.014)\n(0.017)\n(0.019)\n\n\nNum.Obs.\n1470\n1470\n1470\n1470\n\n\nNum.Imp.\n\n\n\n50"
+  },
+  {
+    "objectID": "index.html#conclusion",
+    "href": "index.html#conclusion",
+    "title": "Handling Missing Data",
+    "section": "Conclusion",
+    "text": "Conclusion\n\nNot dealing with missing values is a methodological choice, because any tools for computing statistical models will deal with those missing values (usually this means listwise deletion).\nHow missing values should be dealt with is dependent on the nature of the missingness (MCAR, MAR, MNAR).\nSimple imputation is quick and easy but it may not be very robust, especially when imputing average values.\nThe best solution for missing values is to find them, but failing that, consider multiple imputation."
+  },
+  {
+    "objectID": "index.html#further-resources",
+    "href": "index.html#further-resources",
+    "title": "Handling Missing Data",
+    "section": "Further Resources",
+    "text": "Further Resources\n\n\n{mice} - Multivariate Imputation by Chained Equations\nStef van Buuren (2018) - Flexible Imputation of Missing Data\nHandling Missing Data in R with {mice}"
+  },
+  {
+    "objectID": "index.html#references",
+    "href": "index.html#references",
+    "title": "Handling Missing Data",
+    "section": "References",
+    "text": "References\n\n\n\nPaul Johnson // Handling Missing Values // Jan 31, 2024\n\n\n\n\nMurray, Jared S. 2018. “Multiple Imputation: A Review of Practical and Theoretical Findings.” https://arxiv.org/pdf/1801.04058.pdf.\n\n\nNguyen, Mike. 2020. A Guide on Data Analysis. Bookdown. https://bookdown.org/mike/data_analysis/.\n\n\nRubin, Donald B. 1987. Multiple Imputation for Nonresponse in Surveys. Wiley.\n\n\nVan Buuren, Stef. 2018. Flexible Imputation of Missing Data. CRC press. https://stefvanbuuren.name/fimd/."
+  }
+]
