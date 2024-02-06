@@ -13,7 +13,7 @@ format:
     navigation-mode: linear
     email-obfuscation: javascript
     theme: theme.scss
-    footer: '**Paul Johnson //** Handling Missing Values **//** Jan 31, 2024'
+    footer: '**Paul Johnson //** Handling Missing Values **//** Feb 07, 2024'
     progress: true
     multiplex: false
     scrollable: false
