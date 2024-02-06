@@ -39,14 +39,14 @@
     "href": "index.html#common-strategies-for-missingness",
     "title": "Handling Missing Data",
     "section": "Common Strategies for Missingness",
-    "text": "Common Strategies for Missingness\n\nThe best solution for missing data is to find the data, whether by data collection or processing, or theory-driven inference.\nWhen this is not possible there are two broad approaches to dealing with missing values:\n\nDeletion - Listwise Deletion, Pairwise Deletion\nReplacement - Mean/Median/Mode Imputation, Multiple Imputation, Regression Imputation\n\n\nThe right approach is highly dependent on the nature of the missing data.\nDealing with missing data requires understanding why it is missing first!"
+    "text": "Common Strategies for Missingness\n\nThe best solution for missing data is to find the data, whether by data collection or processing, or theory-driven inference.\nWhen this is not possible there are two broad approaches to dealing with missing values:\n\nDeletion - Listwise Deletion, Pairwise Deletion\nReplacement - Mean/Median/Mode Imputation, Multiple Imputation, Regression Imputation\n\nThe right approach is highly dependent on the nature of the missing data.\nDealing with missing data requires understanding why it is missing first!"
   },
   {
     "objectID": "index.html#deletion-methods",
     "href": "index.html#deletion-methods",
     "title": "Handling Missing Data",
     "section": "Deletion Methods",
-    "text": "Deletion Methods\n\n\nListwise Deletion\n\nRemoving any rows that contain missing values for any relevant variables.\nAnalysis carried out on complete cases only.\n\n\n\nPairwise deletion\n\nRemoving cases where all variables contain missing values.\nAnalysis can be carried out on any data that is complete.\n\n\nListwise deletion can be appropriate when data is missing completely at random, and the volume of missing values is not itself problematic.\nPairwise deletion is less common, but can also work when data is MCAR, and assumes that data is approximately normally distributed."
+    "text": "Deletion Methods\n\nListwise Deletion\n\nRemoving any rows that contain missing values for any relevant variables.\nAnalysis carried out on complete cases only.\n\nPairwise deletion\n\nRemoving cases where all variables contain missing values.\nAnalysis can be carried out on any data that is complete.\n\nListwise deletion can be appropriate when data is missing completely at random, and the volume of missing values is not itself problematic.\nPairwise deletion is less common, but can also work when data is MCAR, and assumes that data is approximately normally distributed."
   },
   {
     "objectID": "index.html#imputation-methods",
@@ -109,7 +109,7 @@
     "href": "index.html#multiple-imputation",
     "title": "Handling Missing Data",
     "section": "Multiple Imputation",
-    "text": "Multiple Imputation\n\nMultiple imputation involves generating multiple datasets, performing analysis on each, and pooling the results. This is a two-stage process:\n\nGenerate multiple completed datasets, filling missing values using a statistical model that estimates imputation values, plus a random component to capture the uncertainty in the estimate.\nCompute estimates on each completed dataset before combining them as pooled estimates and standard errors, using Rubin (1987)’s formula (Murray 2018).\n\n\nThe methods used for each stage may differ, but this two-stage approach is generally consistent across all forms of multiple imputation.\nThis approach acknowledges the uncertainty in the imputation of missing values, and bakes that uncertainty into the process, instead of treating imputed values with equal weight/certainty as non-missing values."
+    "text": "Multiple Imputation\n\nMultiple imputation involves generating multiple datasets, performing analysis on each, and pooling the results. This is a two-stage process:\n\nGenerate multiple completed datasets, filling missing values using a statistical model that estimates imputation values, plus a random component to capture the uncertainty in the estimate.\nCompute estimates on each completed dataset before combining them as pooled estimates and standard errors, using Rubin (1987)’s formula (Murray 2018).\n\nThe methods used for each stage may differ, but this two-stage approach is generally consistent across all forms of multiple imputation.\nThis approach acknowledges the uncertainty in the imputation of missing values, and bakes that uncertainty into the process, instead of treating imputed values with equal weight/certainty as non-missing values."
   },
   {
     "objectID": "index.html#multiple-imputation-1",
@@ -130,7 +130,7 @@
     "href": "index.html#regression-estimates",
     "title": "Handling Missing Data",
     "section": "Regression Estimates",
-    "text": "Regression Estimates\n\n\nmodels &lt;-\n  list(\"No Imputation\" = no_imp,\n       \"Mean\" = mean_imp,\n       \"Regression\" = norm_imp,\n       \"Predictive Mean Matching\" = pmm_imp)\n\ncm &lt;- c(\"(Intercept)\" = \"(Intercept)\",\n        \"arm::rescale(monthly_income)\" = \"Monthly Income\",\n        \"total_working_years\" = \"Total Working Years\")\n\nmodelsummary::modelsummary(\n  models, exponentiate = TRUE, output = \"gt\",\n  coef_map = cm, gof_omit = \"IC|Log|F|RMSE\",\n  title = \"Logstic Regressions of Job Attrition\"\n  ) |&gt;\n  gt::tab_spanner(label = \"Single Imputation\", columns = 3:4) |&gt; \n  gt::tab_spanner(label = \"Multiple Imputation\", columns = 5)\n\n\n\n\n\nLogstic Regressions of Job Attrition\n\n\n\nNo Imputation\nSingle Imputation\nMultiple Imputation\n\n\nMean\nRegression\nPredictive Mean Matching\n\n\n\n\n(Intercept)\n0.301\n0.423\n0.268\n0.303\n\n\n\n(0.058)\n(0.062)\n(0.056)\n(0.072)\n\n\nMonthly Income\n0.550\n0.865\n0.444\n0.564\n\n\n\n(0.154)\n(0.142)\n(0.134)\n(0.227)\n\n\nTotal Working Years\n0.950\n0.913\n0.959\n0.949\n\n\n\n(0.016)\n(0.014)\n(0.017)\n(0.019)\n\n\nNum.Obs.\n1470\n1470\n1470\n1470\n\n\nNum.Imp.\n\n\n\n50"
+    "text": "Regression Estimates\n\n\nmodels &lt;-\n  list(\"No Imputation\" = no_imp,\n       \"Mean\" = mean_imp,\n       \"Regression\" = norm_imp,\n       \"Predictive Mean Matching\" = pmm_imp)\n\ncm &lt;- c(\"(Intercept)\" = \"(Intercept)\",\n        \"arm::rescale(monthly_income)\" = \"Monthly Income\",\n        \"total_working_years\" = \"Total Working Years\")\n\nmodelsummary::modelsummary(\n  models, exponentiate = TRUE, output = \"gt\",\n  coef_map = cm, gof_omit = \"IC|Log|F|RMSE\",\n  title = \"Logstic Regressions of Job Attrition\"\n  ) |&gt;\n  gt::tab_spanner(label = \"Single Imputation\", columns = 3:4) |&gt; \n  gt::tab_spanner(label = \"Multiple Imputation\", columns = 5)\n\n\n\n\n\n\nLogstic Regressions of Job Attrition\n\n\n\nNo Imputation\nSingle Imputation\nMultiple Imputation\n\n\nMean\nRegression\nPredictive Mean Matching\n\n\n\n\n(Intercept)\n0.301\n0.423\n0.268\n0.303\n\n\n\n(0.058)\n(0.062)\n(0.056)\n(0.072)\n\n\nMonthly Income\n0.550\n0.865\n0.444\n0.564\n\n\n\n(0.154)\n(0.142)\n(0.134)\n(0.227)\n\n\nTotal Working Years\n0.950\n0.913\n0.959\n0.949\n\n\n\n(0.016)\n(0.014)\n(0.017)\n(0.019)\n\n\nNum.Obs.\n1470\n1470\n1470\n1470\n\n\nNum.Imp.\n\n\n\n50"
   },
   {
     "objectID": "index.html#conclusion",
@@ -144,7 +144,7 @@
     "href": "index.html#further-resources",
     "title": "Handling Missing Data",
     "section": "Further Resources",
-    "text": "Further Resources\n\n\n{mice} - Multivariate Imputation by Chained Equations\nStef van Buuren (2018) - Flexible Imputation of Missing Data\nHandling Missing Data in R with {mice}"
+    "text": "Further Resources\n\n{mice} - Multivariate Imputation by Chained Equations\nStef van Buuren (2018) - Flexible Imputation of Missing Data\nHandling Missing Data in R with {mice}"
   },
   {
     "objectID": "index.html#references",
