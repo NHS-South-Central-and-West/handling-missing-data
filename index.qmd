@@ -242,7 +242,7 @@ missing_years |>
 - A more robust approach to single imputation is to estimate missing values using a predictive model of the variable in question, using the rest of the variables in the dataset.
 - Regression imputation can rely on a variety of algorithms, based on the type of data being imputed and how complex the model should be.
 - Common algorithms for regression imputation include linear and logistic regression, k-nearest neighbours, and random forest.
-- @vanbuuren2017 argues that regression imputation methods are the "most dangerous" of all the methods for handling missing data, because they give false confidence in the result, despite correlations being biased upwards and variance underestimated.
+- @vanbuuren2018 argues that regression imputation methods are the "most dangerous" of all the methods for handling missing data, because they give false confidence in the result, despite correlations being biased upwards and variance underestimated.
 
 ## Regression Imputation
 
