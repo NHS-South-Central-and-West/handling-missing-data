@@ -1,6 +1,6 @@
 ---
 title: "Handling Missing Data"
-subtitle: "An Introduction to Missing Data Concepts & Methods for Dealing With It"
+subtitle: "An Introduction to Missing Data Concepts & Methods of Resolution"
 author: "Paul Johnson"
 ---
 
