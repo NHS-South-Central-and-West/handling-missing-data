@@ -4,7 +4,7 @@
     "href": "index.html#sources-of-missingness",
     "title": "Handling Missing Data",
     "section": "Sources of Missingness",
-    "text": "Sources of Missingness\nThere are three types of missing data (Rubin 1987):\n\nMissing Completely at Random (MCAR) - Randomly missing, no relationship with other variables in the data, values randomly distributed\nMissing at Random (MAR) - Values randomly distributed, but there is a relationship with other variables in the data\nMissing Not at Random (MNAR) - Missingness is related to other variables and missing values are not random"
+    "text": "Sources of Missingness\n\nThere are three types of missing data (Rubin 1987):\n\nMissing Completely at Random (MCAR) - Randomly missing, no relationship with other variables in the data, values randomly distributed\nMissing at Random (MAR) - Values randomly distributed, but there is a relationship with other variables in the data\nMissing Not at Random (MNAR) - Missingness is related to other variables and missing values are not random\n\nThe type and volume of missing data can seriously impact a variable’s distribution, the results of any analysis carried out on that data, and the validity of any solution."
   },
   {
     "objectID": "index.html#distribution-without-missing-values",
@@ -39,7 +39,7 @@
     "href": "index.html#identifying-missingness-type",
     "title": "Handling Missing Data",
     "section": "Identifying Missingness Type",
-    "text": "Identifying Missingness Type\n\nIn practice, identifying which type of missing data you’ve got is very difficult, requiring a combination of exploratory analysis, domain-expertise, and good judgement.\nThe {mice} and {ggmice} R packages offer functions for carrying out exploratory analysis of missing values in a dataset.\n\n{mice}’s Missingness Inspection vignette details an example exploratory analysis.\nThe ggmice::plot_pattern() function is especially useful for inspecting the missing values in a dataset.\n\nIt is also possible to model missingness using logistic regressions, treating missingness as a binary outcome, and including the rest of the dataset as explanatory variables.\nHowever, none of these methods will give a definitive answer.\nThe starting assumption should be that data is MNAR (Errickson 2017)."
+    "text": "Identifying Missingness Type\n\nIn practice, identifying missingness type is very difficult, requiring exploratory analysis, domain-expertise, and good judgement.\nThe {mice} and {ggmice} R packages offer functions for investigating missingess visually.\n\n{mice}’s Missingness Inspection vignette details an example analysis.\nThe ggmice::plot_pattern() function is especially useful for inspecting missing data patterns.\n\nIt is also possible to model missing values using logistic regression, treating missingness as the binary outcome.\nHowever, none of these methods will give a definitive answer.\nThe starting assumption should always be that data is MNAR (Errickson 2017)."
   },
   {
     "objectID": "index.html#common-approaches",
@@ -60,14 +60,14 @@
     "href": "index.html#imputation-methods",
     "title": "Handling Missing Data",
     "section": "Imputation Methods",
-    "text": "Imputation Methods\n\nImputation involves replacing missing values with values inferred from the rest of the data.\nThere are two types of imputation:\n\nSingle Imputation - Replacing missing values with a single value, estimated from some statistical procedure.\nMultiple Imputation - Creating multiple datasets each replacing missing values with plausible estimated values and pooling estimates from analyses carried out on each dataset.\n\nImputation methods are valid whether data is MCAR, MAR, or MNAR."
+    "text": "Imputation Methods\n\nImputation involves replacing missing values with values inferred from the rest of the data.\nThere are two types of imputation:\n\nSingle Imputation - Replacing missing values with a single value, estimated from some statistical procedure.\nMultiple Imputation - Creating multiple datasets each replacing missing values with plausible estimated values and pooling estimates from analyses carried out on each dataset.\n\nImputation methods can be valid whether data is MCAR, MAR, or MNAR.\n\nHowever, single imputation is flawed and underestimates uncertainty."
   },
   {
     "objectID": "index.html#simple-imputation",
     "href": "index.html#simple-imputation",
     "title": "Handling Missing Data",
     "section": "Simple Imputation",
-    "text": "Simple Imputation\n\nThere are lots of simple procedures for imputing missing values, usually involving replacing all missing values with the variable’s average value1.\nAnother common method is to impute a constant value in place of missing values (such as 99, as often seen in survey data).\nThese methods are almost always a bad idea, because they have many flaws:\n\nDistorts the variable’s distribution, underestimating it’s variance (Van Buuren 2018).\nDisrupts the relationship between the variable with imputed values and all other variables (Nguyen 2020).\nBiases model estimates (Van Buuren 2018).\n\nIt is important to know that these simple imputation methods exist, but the circumstances where using them is valid are very few!\n\nMean imputation is most common, but the median or mode value can also be used."
+    "text": "Simple Imputation\n\nThere are lots of simple procedures for imputing missing values, usually involving replacing all missing values with the variable’s average value (usually the mean, but median and mode can be used too).\nAnother common method is to impute a constant value in place of missing values (such as 99, as often seen in survey data).\nThese methods are almost always a bad idea, because they have many flaws:\n\nDistorts the variable’s distribution, underestimating it’s variance (Van Buuren 2018).\nDisrupts the relationship between the variable with imputed values and all other variables (Nguyen 2020).\nBiases model estimates (Van Buuren 2018).\n\nIt is important to know that these simple imputation methods exist, but the circumstances where using them is valid are very few!"
   },
   {
     "objectID": "index.html#regression-without-imputation",
@@ -88,7 +88,7 @@
     "href": "index.html#regression-imputation",
     "title": "Handling Missing Data",
     "section": "Regression Imputation",
-    "text": "Regression Imputation\n\nA more robust approach to single imputation is to estimate missing values using a predictive model of the variable in question, using the rest of the variables in the dataset.\nRegression imputation can rely on a variety of algorithms, based on the type of data being imputed and how complex the model should be.\nCommon algorithms for regression imputation include linear and logistic regression, k-nearest neighbours, and random forest.\nVan Buuren (2018) argues that regression imputation methods are the “most dangerous” of all the methods for handling missing data, because they give false confidence in the result, despite correlations being biased upwards and variance underestimated."
+    "text": "Regression Imputation\n\nA more robust approach is to estimate a regression model that predicts missing values.\nRegression imputation could take the form of any regression model, depending on the type of data being imputed and how complex the model should be.\n\nAs always, linear and logistic regression are the most common approaches.\nModern machine learning imputation methods, using tree- and neighbour-based algorithms, can be understood as regression imputation, as they are also fitting predictive models.\n\nHowever, Van Buuren (2018) argues regression imputation is the “most dangerous” imputation method, because it give false confidence in outputs."
   },
   {
     "objectID": "index.html#regression-imputation-1",
@@ -140,11 +140,18 @@
     "text": "Regression Estimates\n\n\nmodels &lt;-\n  list(\"No Imputation\" = no_imp,\n       \"Mean\" = mean_imp,\n       \"Regression\" = norm_imp,\n       \"Predictive Mean Matching\" = pmm_imp)\n\ncm &lt;- c(\"(Intercept)\" = \"(Intercept)\",\n        \"arm::rescale(monthly_income)\" = \"Monthly Income\",\n        \"total_working_years\" = \"Total Working Years\")\n\nmodelsummary::modelsummary(\n  models, exponentiate = TRUE, output = \"gt\",\n  coef_map = cm, gof_omit = \"IC|Log|F|RMSE\",\n  title = \"Logstic Regressions of Job Attrition\"\n  ) |&gt;\n  gt::tab_spanner(label = \"Single Imputation\", columns = 3:4) |&gt; \n  gt::tab_spanner(label = \"Multiple Imputation\", columns = 5)\n\n\n\n\n\n\nLogstic Regressions of Job Attrition\n\n\n\nNo Imputation\nSingle Imputation\nMultiple Imputation\n\n\nMean\nRegression\nPredictive Mean Matching\n\n\n\n\n(Intercept)\n0.301\n0.423\n0.268\n0.303\n\n\n\n(0.058)\n(0.062)\n(0.056)\n(0.072)\n\n\nMonthly Income\n0.550\n0.865\n0.444\n0.564\n\n\n\n(0.154)\n(0.142)\n(0.134)\n(0.227)\n\n\nTotal Working Years\n0.950\n0.913\n0.959\n0.949\n\n\n\n(0.016)\n(0.014)\n(0.017)\n(0.019)\n\n\nNum.Obs.\n1470\n1470\n1470\n1470\n\n\nNum.Imp.\n\n\n\n50"
   },
   {
+    "objectID": "index.html#other-imputation-methods",
+    "href": "index.html#other-imputation-methods",
+    "title": "Handling Missing Data",
+    "section": "Other Imputation Methods",
+    "text": "Other Imputation Methods\n\nMachine learning imputation - including k-nearest neighbours (KNN), classification and regression trees (CART), and random forests.\n\nSome research suggests they can produce accurate imputations, but when used in a single imputation process they still risk overconfidence and underestimation of uncertainty.\nWhen a single complete dataset is necessary, and multiple imputation is not possible, machine learning imputation may be appropriate.\nKNN has proven to be both popular and accurate as an imputation method in machine learning.\n\nMultilevel multiple imputation - when there is a clustering structure underpinning the missing data, multilevel models can be effective.\nTime-series imputation - including last-observation carried forward (LOCF), moving averages, interpolation, Kalman smoothing."
+  },
+  {
     "objectID": "index.html#conclusion",
     "href": "index.html#conclusion",
     "title": "Handling Missing Data",
     "section": "Conclusion",
-    "text": "Conclusion\n\nNot dealing with missing values is a methodological choice, because any tools for computing statistical models will deal with those missing values in some way (usually listwise deletion), and this has consequences.\nHow missing values should be handled depends on the nature, and potentially the volume, of the missingness (MCAR, MAR, MNAR)\nSimple imputation methods are quick and easy but are often extremely flawed. Mean imputation is the most common example of a bad imputation method, but regression imputation is potentially even worse!\nThe best solution for missing values is to find them. Failing that, listwise deletion can be appropriate when data is MCAR, and multiple imputation is valid across all types of missingness."
+    "text": "Conclusion\n\nNot dealing with missing values is a methodological choice in and of itself.\n\nStatistical tools will deal with missing values (usually listwise deletion), and this has consequences.\nThose consequences might be acceptable, but that decision should be made explicitly.\n\nHow missing values should be handled depends on the nature, and potentially the volume, of the missingness.\nSingle imputation methods are quick and easy but are often extremely flawed, because they underestimate uncertainty.\nThe best method for dealing with missing values is to find them, but when that is not possible, multiple imputation can be a powerful solution."
   },
   {
     "objectID": "index.html#further-resources",
