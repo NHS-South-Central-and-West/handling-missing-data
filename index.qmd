@@ -1,6 +1,6 @@
 ---
 title: "Handling Missing Data"
-subtitle: "An Introduction to Missing Data & Methods for Dealing With It"
+subtitle: "An Introduction to Missing Data Concepts & Methods for Dealing With It"
 author: "Paul Johnson"
 ---
 
@@ -124,17 +124,28 @@ attrition |>
     years_at_company =
       replace(
         years_at_company,
-        years_at_company < 20, NA
+        years_at_company < 10 & 
+          job_satisfaction == "Low", NA
       )
   ) |>
   plot_satisfaction()
 ```
 
+## Identifying Missingness Type {.center}
+
+- In practice, identifying which type of missing data you've got is very difficult, requiring a combination of exploratory analysis, domain-expertise, and good judgement.
+- The `{mice}` and `{ggmice}` R packages offer functions for carrying out exploratory analysis of missing values in a dataset.
+  - `{mice}`'s [_Missingness Inspection_](https://www.gerkovink.com/miceVignettes/Missingness_inspection/Missingness_inspection.html) vignette details an example exploratory analysis.
+  - The [`ggmice::plot_pattern()`](https://amices.org/ggmice/reference/plot_pattern.html) function is especially useful for inspecting the missing values in a dataset. 
+- It is also possible to model missingness using logistic regressions, treating missingness as a binary outcome, and including the rest of the dataset as explanatory variables.
+- However, none of these methods will give a definitive answer.
+- The starting assumption should be that data is MNAR [@errickson2017].
+
 # Dealing With Missing Data {data-background-color="#425563" data-verticator="#E8EDEE"}
 
 How to Handle Missing Data in an Analysis
 
-## Common Strategies for Missingness {.center}
+## Common Approaches {.center}
 
 - The best solution for missing data is to find the data, whether by data collection or processing, or theory-driven inference.
 - When this is not possible there are two broad approaches to dealing with missing values:
@@ -146,13 +157,14 @@ How to Handle Missing Data in an Analysis
 ## Deletion Methods {.center}
 
 - **Listwise Deletion** 
-  - Removing any rows that contain missing values for any relevant variables.
+  - Removing any observations (rows) that contain missing values for any relevant variables.
   - Analysis carried out on complete cases only.
 - **Pairwise deletion**
-  - Removing cases where all variables contain missing values.
-  - Analysis can be carried out on any data that is complete.
-- Listwise deletion can be appropriate when data is missing completely at random, and the volume of missing values is not itself problematic.
-- Pairwise deletion is less common, but can also work when data is MCAR, and assumes that data is approximately normally distributed.
+  - Removing any missing values, but not the entire observation (row).
+  - Means and covariances are calculated on all observed, and these can be used to build statistical models [@vanbuuren2018].
+- When data is MCAR and the volumes of data that are missing is not an issue, listwise deletion is suitable.
+- When data is MCAR but volumes of data are a concern, pairwise deletion may be a better choice.
+- When data is MAR, deletion methods may still be valid under weaker assumptions [@errickson2017].
 
 ## Imputation Methods {.center}
 
@@ -160,14 +172,17 @@ How to Handle Missing Data in an Analysis
 - There are two types of imputation:
   - Single Imputation - Replacing missing values with a single value, estimated from some statistical procedure.
   - Multiple Imputation - Creating multiple datasets each replacing missing values with plausible estimated values and pooling estimates from analyses carried out on each dataset.
+- Imputation methods are valid whether data is MCAR, MAR, or MNAR.
 
-## Mean Imputation
+## Simple Imputation
 
-- The simplest statistical procedure for imputing missing values is replacing all missing values with the variable's average value^[Mean imputation is most common, but the median or mode value can also be used.].
-- This is almost always a bad idea, because it has multiple flaws:
+- There are lots of simple procedures for imputing missing values, usually involving replacing all missing values with the variable's average value^[Mean imputation is most common, but the median or mode value can also be used.].
+- Another common method is to impute a constant value in place of missing values (such as 99, as often seen in survey data).
+- These methods are almost always a bad idea, because they have many flaws:
   - Distorts the variable's distribution, underestimating it's variance [@vanbuuren2018].
   - Disrupts the relationship between the variable with imputed values and all other variables [@nguyen2020].
   - Biases model estimates [@vanbuuren2018].
+- It is important to know that these simple imputation methods exist, but the circumstances where using them is valid are very few!
 
 ## Regression Without Imputation
 
@@ -225,7 +240,9 @@ missing_years |>
 ## Regression Imputation {.center}
 
 - A more robust approach to single imputation is to estimate missing values using a predictive model of the variable in question, using the rest of the variables in the dataset.
-- Regression imputation can rely on a variety of models, based on the type of data being imputed and how complex the model should be.
+- Regression imputation can rely on a variety of algorithms, based on the type of data being imputed and how complex the model should be.
+- Common algorithms for regression imputation include linear and logistic regression, k-nearest neighbours, and random forest.
+- @vanbuuren2017 argues that regression imputation methods are the "most dangerous" of all the methods for handling missing data, because they give false confidence in the result, despite correlations being biased upwards and variance underestimated.
 
 ## Regression Imputation
 
@@ -339,16 +356,22 @@ modelsummary::modelsummary(
 
 ## Conclusion {.center}
 
-- Not dealing with missing values is a methodological choice, because any tools for computing statistical models will deal with those missing values (usually this means listwise deletion).
-- How missing values should be dealt with is dependent on the nature of the missingness (MCAR, MAR, MNAR).
-- Simple imputation is quick and easy but it may not be very robust, especially when imputing average values.
-- The best solution for missing values is to find them, but failing that, consider multiple imputation.
+- Not dealing with missing values is a methodological choice, because any tools for computing statistical models will deal with those missing values in some way (usually listwise deletion), and this has consequences.
+- How missing values should be handled depends on the nature, and potentially the volume, of the missingness (MCAR, MAR, MNAR)
+- Simple imputation methods are quick and easy but are often extremely flawed. Mean imputation is the most common example of a bad imputation method, but regression imputation is potentially even worse!
+- The best solution for missing values is to find them. Failing that, listwise deletion can be appropriate when data is MCAR, and multiple imputation is valid across all types of missingness.
 
 ## Further Resources {.center}
 
-- [{mice}](https://amices.org/mice/index.html) - Multivariate Imputation by Chained Equations
-- [Stef van Buuren (2018) - Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/)
-- [Handling Missing Data in R with {mice}](https://amices.org/Winnipeg/)
+- Packages for carrying out single & multiple imputation in R & Python:
+  - [`{mice}`](https://amices.org/mice/index.html) (R)
+  - [`fancyimpute`](https://github.com/iskandr/fancyimpute) (Python)
+  - [`sklearn.impute`](https://scikit-learn.org/stable/modules/classes.html#module-sklearn.impute) (Python)
+
+- Resources for learning more about imputation methods:
+  - [`{mice}` Vignettes](https://amices.org/mice/index.html#vignettes)
+  - [Stef van Buuren (2018) - Flexible Imputation of Missing Data](https://stefvanbuuren.name/fimd/)
+  - [Handling Missing Data in R with `{mice}`](https://amices.org/Winnipeg/)
 
 # Thank You!
 
